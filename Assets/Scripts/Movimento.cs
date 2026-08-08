@@ -23,7 +23,7 @@ public class Movimento : MonoBehaviour
 
         playerControle.Disable();
         playerJump.Disable();
-
+         playerJump.performed += PuloPlayer;
 
     }
 
