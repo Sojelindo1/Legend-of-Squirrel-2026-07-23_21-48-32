@@ -9,6 +9,7 @@ public class Movimento : MonoBehaviour
     private float playerPulo = 10f;
     public InputAction playerControle;
     public InputAction playerJump;
+    private bool EstaNoChao;
     Vector2 playerDirec;
     
 
@@ -23,7 +24,7 @@ public class Movimento : MonoBehaviour
 
         playerControle.Disable();
         playerJump.Disable();
-         playerJump.performed += PuloPlayer;
+         playerJump.performed -= PuloPlayer;
 
     }
 
@@ -34,14 +35,32 @@ public class Movimento : MonoBehaviour
         playerPhysics.linearVelocity = new Vector2(playerDirec.x * playerSpeed, playerPhysics.linearVelocity.y);
     }
 
-    private void PuloPlayer(InputAction.CallbackContext context){
+    private void PuloPlayer(InputAction.CallbackContext context)
+{
+    if (!EstaNoChao)
+        return;
 
-        playerPhysics.linearVelocity = new Vector2(playerPhysics.linearVelocity.x, playerPulo);
-
-
-
-
+    playerPhysics.linearVelocity = new Vector2(
+        playerPhysics.linearVelocity.x,
+        playerPulo
+    );
+}
+    
+    private void OnCollisionStay2D(Collision2D collision)
+{
+    if (collision.gameObject.CompareTag("Ground"))
+    {
+        EstaNoChao = true;
     }
+}
+
+private void OnCollisionExit2D(Collision2D collision)
+{
+    if (collision.gameObject.CompareTag("Ground"))
+    {
+        EstaNoChao = false;
+    }
+}
 
 
 
